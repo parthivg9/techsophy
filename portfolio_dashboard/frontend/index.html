@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Insurance Risk Dashboard</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+      body {
+        font-family: 'Inter', sans-serif;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        background-color: #f3f4f6; /* Light gray background */
+      }
+      .container {
+        max-width: 1200px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      /* Custom styles for tables for better readability */
+      table th, table td {
+        padding: 12px 24px; /* More padding */
+      }
+      table th {
+        background-color: #e5e7eb; /* Lighter header background */
+      }
+      table tbody tr:nth-child(even) {
+        background-color: #f9fafb; /* Zebra striping */
+      }
+
+      /* Added custom CSS for enhanced visual appeal */
+      .dashboard-section {
+        background-color: #ffffff;
+        padding: 1.5rem; /* p-6 */
+        border-radius: 0.75rem; /* rounded-xl */
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* shadow-lg */
+        border: 1px solid #e5e7eb; /* border border-gray-200 */
+      }
+
+      .dashboard-heading {
+        font-size: 1.5rem; /* text-2xl */
+        font-weight: 600; /* font-semibold */
+        color: #1f2937; /* text-gray-800 */
+        margin-bottom: 1.5rem; /* mb-6 */
+      }
+
+      .summary-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 1rem; /* p-4 */
+        background-color: #f9fafb; /* bg-gray-50 */
+        border-radius: 0.5rem; /* rounded-lg */
+        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* shadow-sm */
+        transition: box-shadow 0.3s ease-in-out; /* transition-shadow duration-300 */
+      }
+      .summary-item:hover {
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* hover:shadow-md */
+      }
+      .summary-icon {
+        margin-bottom: 0.75rem; /* mb-3 */
+        font-size: 2.25rem; /* text-3xl */
+      }
+      .summary-label {
+        font-size: 0.875rem; /* text-sm */
+        font-weight: 500; /* font-medium */
+        color: #4b5563; /* text-gray-600 */
+        margin-bottom: 0.25rem; /* mb-1 */
+      }
+      .summary-value {
+        font-size: 1.25rem; /* text-xl */
+        font-weight: 700; /* font-bold */
+        color: #111827; /* text-gray-900 */
+      }
+
+      .chart-placeholder {
+        background-color: #e5e7eb; /* bg-gray-200 */
+        height: 12rem; /* h-48 */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #6b7280; /* text-gray-500 */
+        font-size: 0.875rem; /* text-sm */
+        border-radius: 0.25rem; /* rounded */
+        border: 1px dashed #9ca3af; /* Added dashed border for visual cue */
+      }
+      .chart-card {
+        padding: 1rem; /* p-4 */
+        background-color: #f9fafb; /* bg-gray-50 */
+        border-radius: 0.5rem; /* rounded-lg */
+        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* shadow-sm */
+      }
+      .chart-card h3 {
+        font-size: 1.25rem; /* text-xl */
+        font-weight: 600; /* font-semibold */
+        color: #1f2937; /* text-gray-800 */
+        margin-bottom: 1rem; /* mb-4 */
+      }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="bg-gradient-to-r from-blue-600 to-indigo-700 p-4 shadow-lg rounded-b-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="text-white text-2xl font-bold font-inter">
+                Insurance Risk Dashboard
+            </div>
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="#" class="text-white hover:text-blue-200 transition duration-300 font-medium">Overview</a>
+                <a href="#" class="text-white hover:text-blue-200 transition duration-300 font-medium">Portfolio</a>
+                <a href="#" class="text-white hover:text-blue-200 transition duration-300 font-medium">Stress Tests</a>
+                <a href="#" class="text-white hover:text-blue-200 transition duration-300 font-medium">Alerts</a>
+                <a href="#" class="text-white hover:text-blue-200 transition duration-300 font-medium">Settings</a>
+            </div>
+            <!-- Mobile menu button (simple example, no JS functionality here) -->
+            <div class="md:hidden">
+                <button class="text-white focus:outline-none">☰</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto p-6 space-y-8 font-inter">
+
+        <!-- Risk Summary Section -->
+        <div class="dashboard-section">
+            <h2 class="dashboard-heading">Risk Summary</h2>
+            <div id="risk-summary-content" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Content will be injected by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Portfolio Exposure Section -->
+        <div class="dashboard-section">
+            <h2 class="dashboard-heading">Portfolio Exposure</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="chart-card">
+                    <h3>Exposure Over Time (Placeholder)</h3>
+                    <p class="text-gray-600 text-sm mb-4">A line chart showing portfolio exposure over the last 12 months would go here.</p>
+                    <div class="chart-placeholder">Chart Placeholder</div>
+                </div>
+                <div class="chart-card">
+                    <h3>Exposure by Policy Type (Placeholder)</h3>
+                    <p class="text-gray-600 text-sm mb-4">A bar chart showing current exposure by Auto, Home, Life, Commercial, Health policies.</p>
+                    <div class="chart-placeholder">Chart Placeholder</div>
+                </div>
+                <div class="chart-card lg:col-span-2">
+                    <h3>Exposure by Region (Placeholder)</h3>
+                    <p class="text-gray-600 text-sm mb-4">A bar chart showing current exposure across different geographic regions.</p>
+                    <div class="chart-placeholder">Chart Placeholder</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Correlation Matrix Section -->
+        <div class="dashboard-section">
+            <h2 class="dashboard-heading">Correlation Matrix</h2>
+            <div id="correlation-matrix-content" class="overflow-x-auto">
+                <!-- Content will be injected by JavaScript -->
+            </div>
+            <p class="mt-4 text-sm text-gray-600">
+                <span class="font-semibold">Note:</span> Values closer to 1 indicate strong positive correlation, -1 strong negative correlation.
+            </p>
+        </div>
+
+        <!-- Stress Test Results Section -->
+        <div class="dashboard-section">
+            <h2 class="dashboard-heading">Stress Test Results</h2>
+            <div id="stress-test-content" class="overflow-x-auto">
+                <!-- Content will be injected by JavaScript -->
+            </div>
+            <p class="mt-4 text-sm text-gray-600">
+                <span class="font-semibold">Note:</span> These are simulated losses under various stress conditions.
+            </p>
+        </div>
+
+        <!-- Risk Alerts Section -->
+        <div class="dashboard-section">
+            <h2 class="dashboard-heading flex items-center">
+                <span class="text-orange-500 text-3xl mr-2">⚡</span>
+                Risk Alerts
+                <span id="alert-count" class="ml-3 px-3 py-1 text-sm font-bold text-white bg-red-500 rounded-full animate-pulse hidden"></span>
+            </h2>
+            <div id="alerts-content" class="space-y-4">
+                <!-- Content will be injected by JavaScript -->
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // --- Utility Functions ---
+        const formatCurrency = (value) => {
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0,
+            }).format(value);
+        };
+
+        const getSeverityColor = (severity) => {
+            switch (severity) {
+                case 'High': return 'bg-red-100 border-red-400 text-red-800';
+                case 'Medium': return 'bg-yellow-100 border-yellow-400 text-yellow-800';
+                case 'Low': return 'bg-blue-100 border-blue-400 text-blue-800';
+                default: return 'bg-gray-100 border-gray-400 text-gray-800';
+            }
+        };
+
+        // --- Mock Data Generation ---
+        const generateMockData = () => {
+            const policyTypes = ['Auto', 'Home', 'Life', 'Commercial', 'Health'];
+            const regions = ['North America', 'Europe', 'Asia', 'South America', 'Africa', 'Oceania'];
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+            const portfolioExposureOverTime = months.map(month => ({
+                month,
+                Auto: Math.floor(Math.random() * 5000000) + 1000000,
+                Home: Math.floor(Math.random() * 4000000) + 800000,
+                Life: Math.floor(Math.random() * 3000000) + 600000,
+                Commercial: Math.floor(Math.random() * 6000000) + 1200000,
+                Health: Math.floor(Math.random() * 3500000) + 700000,
+            }));
+
+            const currentPortfolioExposure = policyTypes.map(type => ({
+                name: type,
+                value: portfolioExposureOverTime[portfolioExposureOverTime.length - 1][type],
+            }));
+
+            const totalPortfolioValue = currentPortfolioExposure.reduce((sum, item) => sum + item.value, 0);
+            const totalInsuredValue = totalPortfolioValue * (1 + Math.random() * 0.1);
+            const valueAtRisk = totalPortfolioValue * (0.02 + Math.random() * 0.03);
+            const expectedLoss = totalPortfolioValue * (0.005 + Math.random() * 0.01);
+
+            const tempCorrelationMatrix = Array(policyTypes.length).fill(0).map(() => Array(policyTypes.length).fill(0));
+            policyTypes.forEach((rowType, rowIndex) => {
+                policyTypes.forEach((colType, colIndex) => {
+                    if (rowIndex === colIndex) {
+                        tempCorrelationMatrix[rowIndex][colIndex] = 1.0;
+                    } else if (rowIndex < colIndex) {
+                        tempCorrelationMatrix[rowIndex][colIndex] = parseFloat((Math.random() * 0.8 - 0.4).toFixed(2));
+                    } else {
+                        tempCorrelationMatrix[rowIndex][colIndex] = tempCorrelationMatrix[colIndex][rowIndex];
+                    }
+                });
+            });
+
+            const correlationMatrix = policyTypes.map((rowType, rowIndex) => {
+                const row = { name: rowType };
+                policyTypes.forEach((colType, colIndex) => {
+                    row[colType] = tempCorrelationMatrix[rowIndex][colIndex];
+                });
+                return row;
+            });
+
+            const stressTestScenarios = [
+                { name: 'Major Hurricane', impact: 'High', loss: Math.floor(Math.random() * 10000000) + 5000000 },
+                { name: 'Economic Downturn', impact: 'Medium', loss: Math.floor(Math.random() * 7000000) + 3000000 },
+                { name: 'Cyber Attack', impact: 'Medium', loss: Math.floor(Math.random() * 5000000) + 2000000 },
+                { name: 'Pandemic Outbreak', impact: 'High', loss: Math.floor(Math.random() * 12000000) + 6000000 },
+                { name: 'Interest Rate Hike', impact: 'Low', loss: Math.floor(Math.random() * 3000000) + 1000000 },
+            ];
+
+            const alerts = [
+                { id: 1, type: 'concentration', message: 'High exposure to Florida hurricane risk in Home policies.', severity: 'High', timestamp: '2025-07-01T10:00:00Z' },
+                { id: 2, type: 'correlation', message: 'Increased correlation between Auto and Commercial policies detected.', severity: 'Medium', timestamp: '2025-06-30T14:30:00Z' },
+                { id: 3, type: 'stress_test', message: 'Economic Downturn scenario shows 15% higher loss than expected.', severity: 'High', timestamp: '2025-06-29T09:15:00Z' },
+                { id: 4, type: 'diversification', message: 'Portfolio diversification index slightly decreased this quarter.', severity: 'Low', timestamp: '2025-06-28T11:00:00Z' },
+            ];
+
+            return {
+                totalPortfolioValue,
+                totalInsuredValue,
+                valueAtRisk,
+                expectedLoss,
+                correlationMatrix,
+                stressTestScenarios,
+                alerts,
+            };
+        };
+
+        // --- Render Functions ---
+        const renderRiskSummary = (data) => {
+            const summaryItems = [
+                { label: 'Total Portfolio Value', value: formatCurrency(data.totalPortfolioValue), icon: '🛡️' },
+                { label: 'Total Insured Value', value: formatCurrency(data.totalInsuredValue), icon: '📈' },
+                { label: 'Value at Risk (VaR)', value: formatCurrency(data.valueAtRisk), icon: '⚠️' },
+                { label: 'Expected Loss', value: formatCurrency(data.expectedLoss), icon: '📊' },
+            ];
+
+            const container = document.getElementById('risk-summary-content');
+            container.innerHTML = summaryItems.map(item => `
+                <div class="summary-item">
+                    <div class="summary-icon">${item.icon}</div>
+                    <p class="summary-label">${item.label}</p>
+                    <p class="summary-value">${item.value}</p>
+                </div>
+            `).join('');
+        };
+
+        const renderCorrelationMatrix = (matrix) => {
+            const headerRow = matrix.map(row => `
+                <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">${row.name}</th>
+            `).join('');
+
+            const bodyRows = matrix.map((row, rowIndex) => {
+                const cells = matrix.map((col, colIndex) => {
+                    const value = row[col.name];
+                    let colorClass = 'bg-gray-100'; // Neutral or low correlation
+                    if (value === 1) colorClass = 'bg-blue-600 text-white';
+                    else if (value > 0.5) colorClass = 'bg-red-600 text-white';
+                    else if (value > 0.2) colorClass = 'bg-red-400';
+                    else if (value < -0.5) colorClass = 'bg-green-600 text-white';
+                    else if (value < -0.2) colorClass = 'bg-green-400';
+
+                    return `
+                        <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900 text-center font-bold ${colorClass} transition-colors duration-200">
+                            ${value.toFixed(2)}
+                        </td>
+                    `;
+                }).join('');
+
+                return `
+                    <tr>
+                        <td class="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900 rounded-bl-lg">${row.name}</td>
+                        ${cells}
+                    </tr>
+                `;
+            }).join('');
+
+            const tableHtml = `
+                <table class="min-w-full divide-y divide-gray-200 rounded-lg overflow-hidden">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider rounded-tl-lg">Policy Type</th>
+                            ${headerRow}
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        ${bodyRows}
+                    </tbody>
+                </table>
+            `;
+            document.getElementById('correlation-matrix-content').innerHTML = tableHtml;
+        };
+
+        const renderStressTestResults = (scenarios) => {
+            const bodyRows = scenarios.map(scenario => `
+                <tr class="hover:bg-gray-50 transition-colors duration-150">
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${scenario.name}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                            scenario.impact === 'High' ? 'bg-red-100 text-red-800' :
+                            scenario.impact === 'Medium' ? 'bg-yellow-100 text-yellow-800' :
+                            'bg-green-100 text-green-800'
+                        }">
+                            ${scenario.impact}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-right font-semibold">
+                        ${formatCurrency(scenario.loss)}
+                    </td>
+                </tr>
+            `).join('');
+
+            const tableHtml = `
+                <table class="min-w-full divide-y divide-gray-200 rounded-lg overflow-hidden">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider rounded-tl-lg">Scenario</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Impact Level</th>
+                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider rounded-tr-lg">Estimated Loss</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        ${bodyRows}
+                    </tbody>
+                </table>
+            `;
+            document.getElementById('stress-test-content').innerHTML = tableHtml;
+        };
+
+        const renderAlerts = (alerts) => {
+            const container = document.getElementById('alerts-content');
+            const alertCountSpan = document.getElementById('alert-count');
+
+            if (alerts.length === 0) {
+                container.innerHTML = '<p class="text-gray-600 text-lg text-center py-8">No active risk alerts at this time. All clear!</p>';
+                alertCountSpan.classList.add('hidden');
+            } else {
+                container.innerHTML = alerts.map(alert => `
+                    <div class="p-4 rounded-lg border-l-4 ${getSeverityColor(alert.severity)} flex items-start">
+                        <span class="text-2xl flex-shrink-0 mt-1 mr-3">⚠️</span>
+                        <div>
+                            <p class="font-semibold text-lg">${alert.message}</p>
+                            <p class="text-sm text-gray-700 mt-1">
+                                <span class="font-medium">Severity:</span> ${alert.severity} |
+                                <span class="font-medium ml-2">Type:</span> ${alert.type.replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase())} |
+                                <span class="font-medium ml-2">Time:</span> ${new Date(alert.timestamp).toLocaleString()}
+                            </p>
+                        </div>
+                    </div>
+                `).join('');
+                alertCountSpan.textContent = `${alerts.length} New`;
+                alertCountSpan.classList.remove('hidden');
+            }
+        };
+
+        // --- Main Dashboard Initialization ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const data = generateMockData(); // Generate mock data
+
+            renderRiskSummary(data);
+            renderCorrelationMatrix(data.correlationMatrix);
+            renderStressTestResults(data.stressTestScenarios);
+            renderAlerts(data.alerts);
+        });
+    </script>
+
+</body>
+</html>
